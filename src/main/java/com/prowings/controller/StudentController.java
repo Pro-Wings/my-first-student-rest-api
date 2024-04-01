@@ -1,5 +1,6 @@
 package com.prowings.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,8 @@ import com.prowings.entity.Student;
 @RestController
 public class StudentController {
 	
-	@GetMapping("/hello")
+//	@GetMapping(value = "/hello",  produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	@GetMapping(value = "/hello")
 //	@ResponseBody
 	public Student helloWorld()
 	{
