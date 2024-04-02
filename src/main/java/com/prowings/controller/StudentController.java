@@ -1,33 +1,63 @@
 package com.prowings.controller;
 
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prowings.entity.Student;
+import com.prowings.service.StudentService;
 
-//@Controller
 @RestController
 public class StudentController {
 	
-//	@GetMapping(value = "/hello",  produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-	@GetMapping(value = "/hello")
-//	@ResponseBody
-	public Student helloWorld()
+	@Autowired
+	StudentService studentService;
+	
+	@PostMapping("/students")
+	public String saveStudent(@RequestBody Student student)
 	{
-		return new Student(10, "Ram", "Pune");
+		System.out.println("request received to save the student to DB!!");
+		System.out.println("Incoming student object : "+student);
+		boolean res = studentService.saveStudent(student);
+		if (res)
+			return "Student saved successfully!!!";
+		else
+			return "Error while saving the Student!!!";
 	}
 
-	@PostMapping("/hello")
-	public Student helloWorld2(@RequestBody Student std)
+	@GetMapping("/students")
+	public List<Student> getAllStudents()
 	{
-		System.out.println(std);
-		
-		return std;
+		System.out.println("request received to fetch Students from DB!!");
+		return studentService.getAllStudents();
 	}
 
+	@GetMapping("/students/{id}")
+	public Student getStudentById(@PathVariable int id)
+	{
+		System.out.println("request received to fetch Student of id: "+id +"from DB!!");
+		return studentService.getStudentById(id);
+	}
+
+	@GetMapping("/students/search")
+	public List<Student> getAllStudentsSearchBy(@RequestParam("city") String city)
+	{
+		System.out.println("request received to fetch all Students from city : "+city);
+		return studentService.findByCity(city);
+	}
+
+	@GetMapping("/students/sort")
+	public List<Student> getAllStudentsSortBy(@RequestParam("field") String field)
+	{
+		System.out.println("request received to fetch all Students and sort by : "+field);
+		return studentService.findAllSortedByField(field);
+	}
+	
+	
 }
