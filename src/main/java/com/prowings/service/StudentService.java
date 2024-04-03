@@ -16,4 +16,7 @@ public interface StudentService {
 
 	public List<Student> findAllSortedByField(String field);
 
+	public boolean deleteStudentById(int id);
+
+	public boolean updateStudent(Student student);
 }

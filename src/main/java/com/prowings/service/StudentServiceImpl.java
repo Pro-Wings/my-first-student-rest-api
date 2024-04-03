@@ -46,4 +46,16 @@ public class StudentServiceImpl implements StudentService {
 		return studentDao.findAllSortedByField(field);
 	}
 
+	@Override
+	public boolean deleteStudentById(int id) {
+		System.out.println("inside StudentService :: getStudentById()");
+		return studentDao.deleteStudentById(id);
+	}
+
+	@Override
+	public boolean updateStudent(Student student) {
+		System.out.println("inside StudentService :: saveStudent()");
+		return studentDao.updateStudent(student);
+	}
+
 }

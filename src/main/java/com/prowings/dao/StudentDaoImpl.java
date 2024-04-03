@@ -3,6 +3,7 @@ package com.prowings.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.RuntimeErrorException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -51,7 +52,7 @@ public class StudentDaoImpl implements StudentDao {
 		try {
 			session = sessionFactory.openSession();
 			txn = session.beginTransaction();
-			res = session.load(Student.class, id);
+			res = session.get(Student.class, id);
 			txn.commit();
 		}catch (Exception e) {
 			System.out.println("Error while fetching the student!!");
@@ -106,5 +107,68 @@ public class StudentDaoImpl implements StudentDao {
 	            criteriaQuery.select(root).orderBy(builder.asc(root.get(field))); // Assuming 'field' is the name of the field by which you want to sort
 	            return session.createQuery(criteriaQuery).getResultList();
 	        }
+	}
+
+	@Override
+	public boolean deleteStudentById(int id) {
+		Student fetchedStudent = new Student();
+		Session session = null;
+		Transaction txn = null;
+		try {
+			session = sessionFactory.openSession();
+			txn = session.beginTransaction();
+			fetchedStudent = session.get(Student.class, id);
+			if(null != fetchedStudent)
+			{
+				session.remove(fetchedStudent);
+				return true;
+			}
+			else
+			{
+				System.out.println("Student with specified ID : "+id+ " is not present in DB!!");
+				throw new RuntimeException("Student with specified ID is not present in DB!!");
+			}
+			
+		}catch (Exception e) {
+			System.out.println("error while deleting the student!!");
+			e.printStackTrace();
+			return false;
+		}
+		finally {
+			txn.commit();
+			session.close();
+		}
+	}
+
+	@Override
+	public boolean updateStudent(Student student) {
+		System.out.println("inside StudentRepository :: updateStudent()");
+		Student fetchedStudent = new Student();
+		Session session = null;
+		Transaction txn = null;
+		try {
+			session = sessionFactory.openSession();
+			txn = session.beginTransaction();
+			fetchedStudent = session.get(Student.class, student.getId());
+			if(null != fetchedStudent)
+			{
+				session.merge(student);
+				return true;
+			}
+			else
+			{
+				System.out.println("Student with specified ID : "+student.getId()+ " is not present in DB!!");
+				throw new RuntimeException("Student with specified ID is not present in DB!!");
+			}
+			
+		}catch (Exception e) {
+			System.out.println("error while updating the student!!");
+			e.printStackTrace();
+			return false;
+		}
+		finally {
+			txn.commit();
+			session.close();
+		}
 	}
 }
