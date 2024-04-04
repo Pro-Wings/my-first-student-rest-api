@@ -1,22 +1,28 @@
 package com.prowings.controller;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prowings.entity.Student;
+import com.prowings.exception.StudentNotFoundException;
+import com.prowings.model.MyCustomError;
 import com.prowings.service.StudentService;
 
 @RestController
@@ -46,9 +52,14 @@ public class StudentController {
 	}
 
 	@GetMapping("/students/{id}")
-	public ResponseEntity<Student> getStudentById(@PathVariable int id)
+	public ResponseEntity<Student> getStudentById(@PathVariable int id) throws StudentNotFoundException, SQLException
 	{
 		System.out.println("request received to fetch Student of id: "+id +"from DB!!");
+		
+		if(id==0)
+		throw new StudentNotFoundException(id);
+		else if(id == 2)
+			throw new SQLException();
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("my header", "myHeaderValue");
@@ -91,5 +102,15 @@ public class StudentController {
 			return "Error while updating the Student!!!";
 	}
 
+//	@ExceptionHandler(StudentNotFoundException.class)
+//	public ResponseEntity<MyCustomError> handleEmployeeNotFoundException(HttpServletRequest request, Exception ex){
+//		
+//		MyCustomError error = new MyCustomError();
+//		error.setMessage(ex.getMessage());
+//		error.setRootCause("abc");
+//		error.setStatusCode(404);
+//		
+//		return new ResponseEntity<MyCustomError>(error, HttpStatus.NOT_FOUND);
+//	}	
 	
 }
