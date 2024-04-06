@@ -34,4 +34,17 @@ public class StudentExceptionHandler {
 
 	}
 
+	@ExceptionHandler(InvalidStudentException.class)
+	public ResponseEntity<MyCustomError> handleInvalidStudentException(HttpServletRequest request, Exception ex){
+		
+		System.out.println("inside handleInvalidStudentException handler method");
+		MyCustomError error = new MyCustomError();
+		error.setMessage(ex.getMessage());
+		error.setRootCause("abc");
+		error.setStatusCode(400);
+		
+		return new ResponseEntity<MyCustomError>(error, HttpStatus.BAD_REQUEST);
+		
+	}
+
 }

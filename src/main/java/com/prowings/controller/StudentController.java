@@ -55,12 +55,6 @@ public class StudentController {
 	public ResponseEntity<Student> getStudentById(@PathVariable int id) throws StudentNotFoundException, SQLException
 	{
 		System.out.println("request received to fetch Student of id: "+id +"from DB!!");
-		
-		if(id==0)
-		throw new StudentNotFoundException(id);
-		else if(id == 2)
-			throw new SQLException();
-		
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("my header", "myHeaderValue");
 		headers.add("aaaa", "bbbb");

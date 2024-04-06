@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.prowings.dao.StudentDao;
 import com.prowings.entity.Student;
+import com.prowings.exception.InvalidStudentException;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -19,7 +20,18 @@ public class StudentServiceImpl implements StudentService {
 	@Override
 	public boolean saveStudent(Student std) {
 		System.out.println("inside StudentService :: saveStudent()");
-		return studentDao.saveStudent(std);
+		if(validStudent(std))
+			return studentDao.saveStudent(std);
+		else
+			return false;
+	}
+
+	private boolean validStudent(Student std) {
+		
+		if(std.getName().length() >= 3)
+			return true;
+		else
+			throw new InvalidStudentException("invalid name");
 	}
 
 	@Override
