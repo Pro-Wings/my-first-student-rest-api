@@ -1,5 +1,7 @@
 package com.prowings.config;
 
+import javax.servlet.Filter;
+
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class MyWebApplicationInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
@@ -19,4 +21,14 @@ public class MyWebApplicationInitializer extends AbstractAnnotationConfigDispatc
         return new String[] { "/" };
 	}
 
+	@Override
+	protected Filter[] getServletFilters() {
+		
+		MyFilter myFilter = new MyFilter();
+
+        return new Filter[]{myFilter};
+	}
+
+	
+	
 }
