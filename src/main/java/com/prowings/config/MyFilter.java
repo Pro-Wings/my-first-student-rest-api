@@ -14,6 +14,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
+import com.prowings.exception.StudentNotFoundException;
+
 public class MyFilter implements Filter{
 
 	@Override
@@ -31,6 +33,9 @@ public class MyFilter implements Filter{
         String requestBody = getRequestBody(httpRequest);
         System.out.println("Request Body: " + requestBody);
         System.out.println("<<<<<<<<");
+        
+//        if(10/2 == 5)
+//        	throw new StudentNotFoundException(10);
 
         // Continue the filter chain
         chain.doFilter(request, response);

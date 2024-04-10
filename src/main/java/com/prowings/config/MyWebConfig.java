@@ -12,6 +12,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.prowings.exception.StudentExceptionHandler;
@@ -19,7 +21,7 @@ import com.prowings.exception.StudentExceptionHandler;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.prowings")
-public class MyWebConfig {
+public class MyWebConfig implements WebMvcConfigurer{
 
 	public DriverManagerDataSource dataSource() {
 		DriverManagerDataSource ds = new DriverManagerDataSource();
@@ -50,5 +52,14 @@ public class MyWebConfig {
 		return props;
 	}
 
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+       // Register interceptor for specific controller method
+        registry.addInterceptor(new LoggingInterceptor())
+                .addPathPatterns("/v1/*"); 
+	}
+
+	
+	
 
 }
